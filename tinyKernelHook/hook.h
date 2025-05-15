@@ -1,6 +1,6 @@
 #pragma once
 #include <ntddk.h>
-#include <wdf.h>
+#include <wdm.h>
 #include <intrin.h>
 
 typedef struct _REGContext { // 仅通用寄存器
@@ -23,3 +23,4 @@ typedef struct _REGContext { // 仅通用寄存器
 }REGContext, * PREGContext;
 
 INT64 __stdcall Hook0x00001(PREGContext pushedAqs);
+INT64 __stdcall Hook0x00002(PREGContext pushedAqs);

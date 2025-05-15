@@ -3,3 +3,5 @@
 *.tlog
 *.inf
 *.cer
+.gitignore
+statistics.py

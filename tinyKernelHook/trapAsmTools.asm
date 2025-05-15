@@ -60,8 +60,10 @@ GetIDTAddr ENDP
 
 
 CommonHookEntry PROC
+    ; int   3
 	; 自定义中断处理，实际上用于分发hook
 	swapgs
+    push    0                           ; 迁移中断帧
 	push	rcx
 	lea		rcx,[rsp+8]
 	PUSHAQ
@@ -76,6 +78,8 @@ CommonHookEntry PROC
 CommonHookEntry ENDP
 
 DoHookDispatch PROC
+    push rcx
+    lea		rcx,[rsp+8]                 ; DoHookDispatchPre中将其改为触发中断的地址了
 	; 查分发函数
 	PUSHAQ
 	call	DoHookDispatchStub

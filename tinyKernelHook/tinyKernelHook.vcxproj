@@ -114,10 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hook.h" />
+    <ClInclude Include="nmd_assembly.h" />
     <ClInclude Include="trapHook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hook.c" />
+    <ClCompile Include="test.c" />
     <ClCompile Include="trapHook.c" />
   </ItemGroup>
   <ItemGroup>
