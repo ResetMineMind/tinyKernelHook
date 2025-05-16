@@ -376,7 +376,7 @@ ULONG_PTR GetWriteCodeLen(PVOID buffer)
 /* ===> 后续考虑使用红黑树来关联所有hook节点，保证异常分发速度 */
 /* ===> 引入反汇编引擎，实现函数指令长度的在线计算 */
 // 此函数，可重入
-PVOID InstallHook(PCHAR moduleName, PVOID func, PVOID hookFunc, BOOLEAN call) {
+PVOID InstallHook(PCHAR moduleName, PVOID func, PVOID hookFunc) {
     ULONG64 moduleBase = 0;
     BOOLEAN get = FindModuleBaseByChain(moduleName, &moduleBase);
     if (!get) {
@@ -573,12 +573,12 @@ VOID InitAndInstallHook(
     // 都是可重入的函数
     // InstallHook("tinykernelhook.sys", &TestHook, &ExecuteHook0x00001, TRUE);
     // TestHook(1, 2, 3, 4, 5, 6);
-    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001, TRUE);
-    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002, TRUE);
-    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001, TRUE);
-    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002, TRUE);
-    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001, TRUE);
-    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002, TRUE);
+    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001);
+    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002);
+    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001);
+    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002);
+    InstallHook("ntoskrnl.exe", &NtCreateFile, &ExecuteHook0x00001);
+    InstallHook("ntoskrnl.exe", &ZwCreateFile, &ExecuteHook0x00002);
     DbgPrintEx(DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "CPU %d InitAndInstallHook Ok!\n", index);
 
     if (SystemArgument2 != 0 && SystemArgument1 != 0) {

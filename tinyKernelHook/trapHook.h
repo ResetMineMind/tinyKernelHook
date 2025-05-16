@@ -73,7 +73,7 @@ PVOID GetIDTEntryFuncAddr(PVOID idt);
 // MDL修改内存
 VOID MdlChangeBytes(PVOID orgAddrBase, UINT32 offset, PVOID payload, UINT32 length);
 // 安装一个Hook，记录hook信息
-PVOID InstallHook(PVOID moudleBase, PVOID func, PVOID hookFunc, BOOLEAN call);
+PVOID InstallHook(PVOID moudleBase, PVOID func, PVOID hookFunc);
 // 卸载所有Hook
 NTSTATUS UnInstallHook();
 

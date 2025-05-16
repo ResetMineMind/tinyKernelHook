@@ -42,44 +42,46 @@ POPAQ MACRO
     pop     rax
 ENDM
 
+HOOKENTRY MACRO hookWrapper,hookStub
+    hookWrapper PROC
+    ALIGN 16
+        mov     rcx,rsp
+	    call	hookStub
+    ALIGN 16
+        POPAQ
+        pop     rcx
+        add     rsp, 8
+    ALIGN 16
+    back:
+	    REPEAT 020h
+            int     3
+        ENDM
+    hookWrapper ENDP
+ENDM
+
 .CODE
 
-ExecuteHook0x00001 PROC
-ALIGN 16
-    mov     rcx,rsp
-	call	Hook0x00001                 ; 执行自定义函数
-    ; POPAQ                             ; 会影响后续 0x30 总偏移的计算
-    ; ret                               ; 但是如果就此返回，理论上堆栈是不平衡的（因为原始函数调用可能有参数压栈，此时被调用者没有平栈？思考调用约定）
-ALIGN 16
-    POPAQ                               ; 恢复原始的 函数调用信息 => 占据空间 0x20
-    pop     rcx                         ; DoHookDispatchStub 参数使用rcx
-    add     rsp, 8                      ; 在中断触发时，用来保存触发地址了
-    
-                                        ; 打算后续的内容都在注册hook时主动进行修改。
-ALIGN 16                                ; 这里的偏移一定是：0x20 + 0x10 => 0x30
-back:
-	REPEAT 020h
-        int     3
-    ENDM
-ExecuteHook0x00001 ENDP
+HOOKENTRY ExecuteHook0x00001, Hook0x00001
+HOOKENTRY ExecuteHook0x00002, Hook0x00002
 
-ExecuteHook0x00002 PROC
-ALIGN 16
-    mov     rcx,rsp
-	call	Hook0x00002                 ; 执行自定义函数
-    ; POPAQ                             ; 会影响后续 0x30 总偏移的计算
-    ; ret                               ; 但是如果就此返回，理论上堆栈是不平衡的（因为原始函数调用可能有参数压栈，此时被调用者没有平栈？思考调用约定）
-ALIGN 16
-    POPAQ                               ; 恢复原始的 函数调用信息 => 占据空间 0x20
-    pop     rcx                         ; DoHookDispatchStub 参数使用rcx
-    add     rsp, 8                      ; 在中断触发时，用来保存触发地址了
-    
-                                        ; 打算后续的内容都在注册hook时主动进行修改。
-ALIGN 16                                ; 这里的偏移一定是：0x20 + 0x10 => 0x30
-back:
-	REPEAT 020h
-        int     3
-    ENDM
-ExecuteHook0x00002 ENDP
+; 后续实现Hook0xyyyyy后，使用HOOKENTRY在此处注册即可
+
+; ExecuteHook0x00001 PROC
+; ALIGN 16
+;     mov     rcx,rsp
+;     call	  Hook0x00001                 ; 执行自定义函数
+;     ; POPAQ                             ; 会影响后续 0x30 总偏移的计算
+;     ; ret                               ; 但是如果就此返回，理论上堆栈是不平衡的（因为原始函数调用可能有参数压栈，此时被调用者没有平栈？思考调用约定）
+; ALIGN 16
+;     POPAQ                               ; 恢复原始的 函数调用信息 => 占据空间 0x20
+;     pop     rcx                         ; DoHookDispatchStub 参数使用rcx
+;     add     rsp, 8                      ; 在中断触发时，用来保存触发地址了    
+;                                         ; 打算后续的内容都在注册hook时主动进行修改。
+; ALIGN 16                                ; 这里的偏移一定是：0x20 + 0x10 => 0x30
+; back:
+; 	REPEAT 020h
+;         int     3
+;     ENDM
+; ExecuteHook0x00001 ENDP
 
 END
