@@ -566,6 +566,7 @@ VOID InitAndInstallHook(
 ) {
     UNREFERENCED_PARAMETER(Dpc);
     UNREFERENCED_PARAMETER(DeferredContext);
+    // DbgBreakPoint();
 
     //获取当前CPU核心的号数
     ULONG index = KeGetCurrentProcessorIndex();

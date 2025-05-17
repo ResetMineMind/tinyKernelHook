@@ -1,5 +1,7 @@
 # tinyKernelHook
 
+​	项目介绍：https://bbs.kanxue.com/thread-286868.htm
+
 #### 1. 基本原理
 
 ​	借用windows使用的`int 2e`异常劫持控制流。
